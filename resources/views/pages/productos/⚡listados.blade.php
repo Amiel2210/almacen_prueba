@@ -10,12 +10,10 @@ new class extends Component
 };
 ?>
 
-@extends('layouts.app')
-@section('contenido')
 
 <div>
     @livewire('productos-form')
     @livewire('productos-index')
 </div>
 
-@endsection
+

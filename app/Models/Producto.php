@@ -15,8 +15,8 @@ class Producto extends Model
     'precio'
 ];
 
-    public function cantidad()
+    public function stock_almacen()
     {
-        return $this->hasMany(Stock_Almacen::class,'producto_id','id');
+        return $this->hasMany(Stock_Almacen::class, 'producto_id');
     }
 }

@@ -90,7 +90,7 @@ new class extends Component {
     @endif
 
     <form wire:submit="guardar" class="space-y-4">
-        <h2 class="text-lg font-bold">{{ $producto ? 'Editar producto' : 'Nuevo producto' }}</h2>
+        <h2 class="text-lg font-bold text-[#D81B60]">{{ $producto ? 'Editar producto' : 'Nuevo producto' }}</h2>
 
         <div>
             <label for="codigo" class="block text-sm font-medium">Código</label>
@@ -117,7 +117,9 @@ new class extends Component {
         </div>
 
         <div class="flex gap-2">
-            <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Guardar</button>
+            <button type="submit" class="px-4 py-2 bg-[#D81B60] hover:bg-[#AD1457] text-white font-medium rounded-lg shadow-sm transition">
+    Guardar
+</button>
             @if ($producto)
                 <button type="button" wire:click="cancelar" class="px-4 py-2 bg-gray-400 text-white rounded">Cancelar</button>
             @endif

@@ -64,7 +64,7 @@ new class extends Component {
 
     public function guardar()
     {
-        $datos =$this->validate();
+        $datos = $this->validate();
 
         if ($this->movimiento) {
             $this->movimiento->update($datos);
@@ -79,13 +79,16 @@ new class extends Component {
 
     public function cancelar()
     {
-        $this->reset();$this->resetValidation();
+        $this->reset();
+        $this->resetValidation();
     }
 
     #[On('editar-movimiento')]
     public function editar($id)
     {
-        $this->movimiento = Movimiento::findOrFail($id);$this->fill($this->movimiento->only('producto_id', 'almacen_id', 'user_id', 'tipo_movimiento'));$this->resetValidation();
+        $this->movimiento = Movimiento::findOrFail($id);
+        $this->fill($this->movimiento->only('producto_id', 'almacen_id', 'user_id', 'tipo_movimiento'));
+        $this->resetValidation();
     }
 };
 ?>
@@ -103,8 +106,8 @@ new class extends Component {
                 <label for="producto_id" class="block text-sm font-medium">Producto</label>
                 <select id="producto_id" wire:model.blur="producto_id" class="w-full border rounded px-3 py-2 bg-white">
                     <option value="">Seleccione un producto...</option>
-                    @foreach ($this->productos as$prod)
-                        <option value="{{ $prod->id }}">{{ $prod->codigo }} - {{$prod->nombre }}</option>
+                    @foreach ($this->productos as $prod)
+                        <option value="{{ $prod->id }}">{{ $prod->codigo }} - {{ $prod->nombre }}</option>
                     @endforeach
                 </select>
                 @error('producto_id') <p class="text-sm text-red-600">{{ $message }}</p> @enderror
@@ -114,7 +117,7 @@ new class extends Component {
                 <label for="almacen_id" class="block text-sm font-medium">Almacén</label>
                 <select id="almacen_id" wire:model.blur="almacen_id" class="w-full border rounded px-3 py-2 bg-white">
                     <option value="">Seleccione un almacén...</option>
-                    @foreach ($this->almacenes as$alm)
+                    @foreach ($this->almacenes as $alm)
                         <option value="{{ $alm->id }}">{{ $alm->nombre }}</option>
                     @endforeach
                 </select>
@@ -125,7 +128,7 @@ new class extends Component {
                 <label for="user_id" class="block text-sm font-medium">Usuario Responsable</label>
                 <select id="user_id" wire:model.blur="user_id" class="w-full border rounded px-3 py-2 bg-white">
                     <option value="">Seleccione un usuario...</option>
-                    @foreach ($this->usuarios as$usr)
+                    @foreach ($this->usuarios as $usr)
                         <option value="{{ $usr->id }}">{{ $usr->name }}</option>
                     @endforeach
                 </select>

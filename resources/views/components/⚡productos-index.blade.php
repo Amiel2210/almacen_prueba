@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Almacen;
-use App\Models\Categoria;
 use App\Models\Producto;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -16,10 +15,10 @@ new class extends Component {
     public $buscar = '';
 
     #[Url]
-    public $categoria_id = '';
+    public $almacen_id = '';
 
     #[Url]
-    public $almacen_id = '';
+    public $estado_stock = '';
 
     #[Url]
     public $rango_precio = '';
@@ -29,12 +28,12 @@ new class extends Component {
         $this->resetPage();
     }
 
-    public function updatedCategoriaId()
+    public function updatedAlmacenId()
     {
         $this->resetPage();
     }
 
-    public function updatedAlmacenId()
+    public function updatedEstadoStock()
     {
         $this->resetPage();
     }
@@ -50,12 +49,6 @@ new class extends Component {
     }
 
     #[Computed]
-    public function categorias()
-    {
-        return Categoria::orderBy('nombre')->get();
-    }
-
-    #[Computed]
     public function almacenes()
     {
         return Almacen::orderBy('nombre')->get();
@@ -64,7 +57,7 @@ new class extends Component {
     #[Computed]
     public function productos()
     {
-        $consulta = Producto::with(['categoria', 'stock_almacen']);
+        $consulta = Producto::with(['stock_almacen']);
 
         if ($this->buscar) {
             $consulta->where(function ($q) {
@@ -73,14 +66,20 @@ new class extends Component {
             });
         }
 
-        if ($this->categoria_id) {
-            $consulta->where('categoria_id', $this->categoria_id);
-        }
-
         if ($this->almacen_id) {
             $consulta->join('stock_almacen', 'productos.id', '=', 'stock_almacen.producto_id')
                      ->where('stock_almacen.almacen_id', $this->almacen_id)
                      ->select('productos.*');
+        }
+
+        if ($this->estado_stock === 'con_stock') {
+            $consulta->whereHas('stock_almacen', function ($q) {
+                $q->where('stock', '>', 0);
+            });
+        } elseif ($this->estado_stock === 'sin_stock') {
+            $consulta->whereDoesntHave('stock_almacen', function ($q) {
+                $q->where('stock', '>', 0);
+            });
         }
 
         if ($this->rango_precio === 'bajo') {
@@ -107,16 +106,6 @@ new class extends Component {
         >
 
         <select
-            wire:model.live="categoria_id"
-            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-            <option value="">Todas las categorías</option>
-            @foreach ($this->categorias as $categoria)
-                <option value="{{ $categoria->id }}">{{ $categoria->nombre }}</option>
-            @endforeach
-        </select>
-
-        <select
             wire:model.live="almacen_id"
             class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         >
@@ -124,6 +113,15 @@ new class extends Component {
             @foreach ($this->almacenes as $almacen)
                 <option value="{{ $almacen->id }}">{{ $almacen->nombre }}</option>
             @endforeach
+        </select>
+
+        <select
+            wire:model.live="estado_stock"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+            <option value="">Todo el stock</option>
+            <option value="con_stock">Con stock disponible</option>
+            <option value="sin_stock">Sin stock (Agotados)</option>
         </select>
 
         <select
@@ -144,7 +142,7 @@ new class extends Component {
                 <tr>
                     <th class="px-6 py-3">Código</th>
                     <th class="px-6 py-3">Nombre</th>
-                    <th class="px-6 py-3">Categoría</th>
+                    <th class="px-6 py-3">Descripción</th>
                     <th class="px-6 py-3">Precio</th>
                     <th class="px-6 py-3">Stock</th>
                     <th class="px-6 py-3">Acciones</th>
@@ -155,9 +153,9 @@ new class extends Component {
                     <tr class="border-b hover:bg-gray-50">
                         <td class="px-6 py-4">{{ $producto->codigo }}</td>
                         <td class="px-6 py-4">{{ $producto->nombre }}</td>
-                        <td class="px-6 py-4">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</td>
+                        <td class="px-6 py-4">{{ $producto->descripcion ?? '-' }}</td>
                         <td class="px-6 py-4">S/ {{ number_format($producto->precio, 2) }}</td>
-                        <td class="px-6 py-4">{{ $producto->stock_almacen->first()?->stock ?? 0 }}</td>
+                        <td class="px-6 py-4">{{ $producto->stock_almacen->sum('stock') }}</td>
                         <td class="px-6 py-4">
                             <button
                                 type="button"

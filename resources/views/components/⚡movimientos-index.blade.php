@@ -104,7 +104,7 @@ new class extends Component {
     <!-- Tabla de datos -->
     <div class="bg-white shadow-md rounded-lg overflow-hidden">
         <table class="w-full text-sm text-left">
-            <thead class="bg-gray-100 text-gray-700 font-bold uppercase">
+            <tr class="border-b border-gray-100 hover:bg-[#FCE4EC]/50 transition">
                 <tr>
                     <th class="px-6 py-3">Producto</th>
                     <th class="px-6 py-3">Almacén</th>
@@ -121,13 +121,9 @@ new class extends Component {
                         <td class="px-6 py-4 uppercase font-semibold">{{ $movimiento->tipo_movimiento }}</td>
                         <td class="px-6 py-4">{{ $movimiento->user->name ?? 'Sin usuario' }}</td>
                         <td class="px-6 py-4">
-                            <button
-                                type="button"
-                                wire:click="$dispatch('editar-movimiento', { id: {{ $movimiento->id }} })"
-                                class="text-blue-600 hover:underline font-medium"
-                            >
-                                Editar
-                            </button>
+                            <button type="button" ... class="text-[#D81B60] hover:text-[#880E4F] hover:underline font-semibold">
+    Editar
+</button>
                         </td>
                     </tr>
                 @empty
