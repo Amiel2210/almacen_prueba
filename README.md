@@ -123,3 +123,17 @@ Se implementó un filtro por **Rango de Precios** (`$rango_precio`) persistido e
 | `-5.00` o `0` | `precio` | `gt:0` | Rechazado: *"El precio debe ser mayor que cero."* |
 | `HER-0001` (código ya registrado) | `codigo` | `Rule::unique` / `unique:productos,codigo` | Rechazado: *"Ya existe un producto con ese código."* |
 | Texto de más de 100 caracteres | `nombre` | `max:100` | Rechazado: *"El nombre admite como máximo 100 caracteres."* |
+
+## Funcionalidades Implementadas — Unidad III (Livewire)
+
+### Filtro Personalizado: Rango de Precios (Tarea 02)
+Además de la búsqueda por nombre/código y los filtros por almacén y disponibilidad de stock, se implementó un filtro personalizado por **Rango de Precios** (`Económicos: < S/ 50`, `Intermedios: S/ 50 - S/ 200` y `Costosos: > S/ 200`), persistente en la URL mediante el atributo `#[Url]`. Este filtro resulta útil para el personal del almacén porque permite segmentar rápidamente el inventario según su valor unitario, facilitando auditorías prioritarias sobre mercancía de alto costo o consultas rápidas de insumos de baja rotación sin recorrer todo el catálogo.
+
+### Pruebas de Validación en Formularios (Tarea 03)
+Se realizaron pruebas de esfuerzo en los formularios de **Productos** y **Movimientos** utilizando reglas sincronizadas entre Livewire (`rules()` / `messages()`) y los `FormRequest` del API, verificando el bloqueo de datos inválidos con mensajes claros en español:
+
+| Módulo / Campo | Dato Inválido Probado | Regla Aplicada | Mensaje de Error Mostrado al Usuario |
+| :--- | :--- | :--- | :--- |
+| **Productos** (`codigo`) | `FIJ-0255` (código ya registrado en la base de datos) | `unique:productos,codigo` | *"Ese código ya está registrado en el sistema."* |
+| **Productos** (`precio`) | `-15.00` o `0` (valor negativo o nulo) | `numeric`, `min:0.01` | *"El precio debe ser mayor a cero."* |
+| **Movimientos** (`producto_id`) | Campo vacío (intento de guardar sin elegir producto) | `required`, `exists:productos,id` | *"Debe seleccionar un producto."* |
