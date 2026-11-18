@@ -8,8 +8,8 @@
     @vite('resources/css/app.css')
 </head>
 <body class="bg-gray-100">
-    <div class="container mx-auto py-10 px-6 rounded-2xl bg-gradient-to-b from-gray-300 to-gray-500 shadow-lg max-w-7xl mt-7"> 
-        @yield('contenido')
+    <div class="container mx-auto py-10 px-6 rounded-2xl bg-gradient-to-b from-gray-300 to-gray-500 shadow-lg max-w-7xl mt-7">
+        {{ $slot }}('contenido')
     </div>
 </body>
 </html>

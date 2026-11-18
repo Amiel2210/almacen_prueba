@@ -114,3 +114,12 @@ npm install
 npm run build
 php artisan optimize:clear
 ```
+## Filtro Propio Implementado (Tarea 02)
+Se implementó un filtro por **Rango de Precios** (`$rango_precio`) persistido en la URL mediante el atributo `#[Url]`. Este filtro permite al almacenero segmentar el inventario directamente en SQL (`where` y `whereBetween`) entre productos económicos (< S/ 50), intermedios (S/ 50 - S/ 200) y costosos (> S/ 200), optimizando la consulta en catálogos extensos sin cargar colecciones completas en memoria.
+
+## Validaciones y Datos Inválidos Bloqueados (Tarea 03)
+| Dato inválido probado | Campo | Regla que lo impide | Resultado en Livewire y API |
+| :--- | :--- | :--- | :--- |
+| `-5.00` o `0` | `precio` | `gt:0` | Rechazado: *"El precio debe ser mayor que cero."* |
+| `HER-0001` (código ya registrado) | `codigo` | `Rule::unique` / `unique:productos,codigo` | Rechazado: *"Ya existe un producto con ese código."* |
+| Texto de más de 100 caracteres | `nombre` | `max:100` | Rechazado: *"El nombre admite como máximo 100 caracteres."* |

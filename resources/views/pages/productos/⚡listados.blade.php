@@ -6,13 +6,16 @@ use Livewire\Attributes\Computed;
 
 
 new class extends Component
-{ 
+{
 };
 ?>
 
 @extends('layouts.app')
 @section('contenido')
 
-@livewire('productos-index')
+<div>
+    @livewire('productos-form')
+    @livewire('productos-index')
+</div>
 
 @endsection
